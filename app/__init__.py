@@ -10,7 +10,7 @@ import pymysql
 import os
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:root@localhost/movie"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:admin@localhost/movie"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SECRET_KEY"] = 'af2fad8cfe1f4c5fac4aa5edf6fcc8f3'
 app.config["REDIS_URL"] = "redis://192.168.4.1:6379/0"

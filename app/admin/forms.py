@@ -76,6 +76,10 @@ class TagForm(FlaskForm):
 
 
 class MovieForm(FlaskForm):
+    def __init__(self, *args, **kwargs):
+        super(MovieForm, self).__init__(*args, **kwargs)
+        # 在初始化表单时设置choices
+        self.tag_id.choices = [(v.id, v.name) for v in Tag.query.all()]    
     title = StringField(
         label="片名",
         validators=[
@@ -126,14 +130,12 @@ class MovieForm(FlaskForm):
     )
     tag_id = SelectField(
         label="标签",
-        validators=[
-            DataRequired("请选择标签！")
-        ],
+        validators=[DataRequired("请选择标签！")],
         coerce=int,
-        choices=[(v.id, v.name) for v in Tag.query.all()],
-        description="标签",
+        choices=[],  # 先设置为空，在__init__中动态设置
         render_kw={
-            "class": "form-control",
+            'class': "form-control",
+            'id': "input_tag_id",
         }
     )
     area = StringField(
@@ -283,9 +285,9 @@ class RoleForm(FlaskForm):
         validators=[
             DataRequired("请输入角色名称！")
         ],
-        description="角色名称",
         render_kw={
             "class": "form-control",
+            "id": "input_name",
             "placeholder": "请输入角色名称！"
         }
     )
@@ -295,8 +297,7 @@ class RoleForm(FlaskForm):
             DataRequired("请选择权限列表！")
         ],
         coerce=int,
-        choices=[(v.id, v.name) for v in Auth.query.all()],
-        description="权限列表",
+        choices=[],  # 先初始化为空列表
         render_kw={
             "class": "form-control",
         }
@@ -307,6 +308,12 @@ class RoleForm(FlaskForm):
             "class": "btn btn-primary",
         }
     )
+
+    def __init__(self, *args, **kwargs):
+        super(RoleForm, self).__init__(*args, **kwargs)
+        # 动态设置auths的choices
+        self.auths.choices = [(v.id, v.name) for v in Auth.query.all()]
+
 
 
 class AdminForm(FlaskForm):
@@ -347,7 +354,7 @@ class AdminForm(FlaskForm):
     role_id = SelectField(
         label="所属角色",
         coerce=int,
-        choices=[(v.id, v.name) for v in Role.query.all()],
+        choices=[],  # 初始化为空列表
         render_kw={
             "class": "form-control",
         }
@@ -358,3 +365,8 @@ class AdminForm(FlaskForm):
             "class": "btn btn-primary",
         }
     )
+
+    def __init__(self, *args, **kwargs):
+            super(AdminForm, self).__init__(*args, **kwargs)
+            # 动态设置role_id的choices
+            self.role_id.choices = [(v.id, v.name) for v in Role.query.all()]

@@ -9,4 +9,5 @@ from flask_script import Manager
 manage = Manager(app)
 
 if __name__ == "__main__":
-    manage.run()
+    # manage.run()
+    manage.run(debug=True, host='0.0.0.0')
